@@ -5,7 +5,7 @@ This repository holds two independent projects:
 | Project | Folder | What it is |
 |---------|--------|------------|
 | **3D network visualization** | repo root (`src/`) | Interactive web app (React + Three.js) that follows one HTTP request from a laptop, through a router and fibre optic cables, to a server |
-| **Claymation video** | `claymation/` | 20-second stop-motion style animation (Remotion + Three.js), already rendered as `claude-claymation.mp4` |
+| **Claymation video** | `claymation/` | 20-second stop-motion style animation (Remotion + Three.js), already rendered with sound as `claude-claymation.mp4` |
 
 Each project has its own `package.json` and `node_modules`, so install them separately.
 
@@ -60,7 +60,7 @@ src/
 
 ## 2. Claymation video (Remotion)
 
-The finished video is already in the repo root: **`claude-claymation.mp4`** (1920×1080, 12 fps, 240 frames, 20 s). You only need the steps below to preview or change it.
+The finished video is already in the repo root: **`claude-claymation.mp4`** (1920×1080, 12 fps, 240 frames, 20 s, with music and sound effects). The sounds are synthesized by `claymation/scripts/make_audio.py`; see `claymation/README.md`. You only need the steps below to preview or change it.
 
 All commands run inside the `claymation/` folder:
 
