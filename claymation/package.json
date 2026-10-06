@@ -1,0 +1,19 @@
+{
+  "name": "claude-claymation",
+  "private": true,
+  "version": "1.0.0",
+  "description": "20-second stop-motion claymation (Remotion + Three.js) starring a terracotta starburst character.",
+  "scripts": {
+    "studio": "remotion studio src/index.jsx",
+    "render": "remotion render src/index.jsx ClayMath ../claude-claymation.mp4 --gl=swangle"
+  },
+  "dependencies": {
+    "@react-three/fiber": "9.8.1",
+    "@remotion/cli": "4.0.533",
+    "@remotion/three": "4.0.533",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "remotion": "4.0.533",
+    "three": "0.186.1"
+  }
+}
