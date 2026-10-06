@@ -1,73 +1,119 @@
 # 3d-internet-app
 
-Interactive 3D network explainer website built with Three.js and React.
+This repository holds two independent projects:
 
-It follows one HTTP request (`GET /index.html`) as it travels through four
-low-poly stations:
+| Project | Folder | What it is |
+|---------|--------|------------|
+| **3D network visualization** | repo root (`src/`) | Interactive web app (React + Three.js) that follows one HTTP request from a laptop, through a router and fibre optic cables, to a server |
+| **Claymation video** | `claymation/` | 20-second stop-motion style animation (Remotion + Three.js), already rendered as `claude-claymation.mp4` |
 
-| # | Station | What it teaches |
-|---|---------|-----------------|
-| 1 | **Laptop** | DNS, TCP/TLS handshakes, encapsulation, NIC → electrical signal |
-| 2 | **Router** | NAT, routing tables, TTL, electrical → optical (ONT) |
-| 3 | **Fibre optics** | Bits as laser light, total internal reflection, speed of light in glass, DWDM |
-| 4 | **Server** | Load balancing, decapsulation, HTTP `200 OK` response and round-trip time |
+Each project has its own `package.json` and `node_modules`, so install them separately.
 
-A timeline at the bottom moves the camera between the stations while a glowing
-request packet travels along the cables. Light pulses stream continuously in
-both directions: cyan for requests, amber for responses, pale blue for
-electrical signals on copper and magenta for a second fibre wavelength. Each
-step has a side panel showing how the packet header (source/destination IP,
-TTL, medium) changes along the way.
+**Requirements:** Node.js 18 or newer (20+ recommended) and npm.
 
-## Running it
+---
 
-Requires Node.js 18+.
+## 1. 3D network visualization app
+
+### Launch it
+
+From the repository root:
 
 ```bash
 npm install
-npm run dev       # http://localhost:5173
-npm run build     # production build in dist/
-npm run preview   # serve the production build
+npm run dev
 ```
 
-### Controls
+Then open **http://localhost:5173** in a browser with WebGL support (any recent Chrome, Edge, Firefox or Safari).
 
-- **Timeline**: click a station, use ‹ › to step, or ▶ to play the tour automatically
-- **Keyboard**: `←` `→` step · `1`–`4` jump · `Space` play/pause · `O` overview
-- **Click** a 3D object or its floating label to fly to it
-- Move the mouse for a gentle parallax effect
+Other commands:
 
-## Project structure
+```bash
+npm run build     # production build into dist/
+npm run preview   # serve the production build at http://localhost:4173
+```
+
+The contents of `dist/` are static files, so they can be hosted on any static web host (GitHub Pages, Netlify, a university web server, etc.).
+
+### Using it
+
+The app walks through four stations: **Laptop → Router → Fibre optics → Server**. Each one has a side panel explaining what happens there and how the packet header (IP addresses, TTL, medium) changes.
+
+- **Timeline** (bottom): click a station, use ‹ › to step, or ▶ to play the tour automatically
+- **Keyboard:** `←` `→` step · `1`–`4` jump to a station · `Space` play/pause · `O` overview
+- **Mouse:** click a 3D object or its floating label to fly to it
+
+Pulse colours: cyan = request, amber = response, pale blue = electrical signal on copper, magenta = a second fibre wavelength.
+
+### Where things are
 
 ```
 src/
-  App.jsx               state: current station, autoplay, keyboard shortcuts
-  stations.js           camera poses + teaching content for each station
-  paths.js              cable routes (Catmull-Rom curves) shared by cables, pulses and packet
-  scene/
-    Scene.jsx           <Canvas>, lights, bloom, clickable stations
-    CameraRig.jsx       eased, arcing camera flights between stations
-    Packet.jsx          request packet + looping response packet
-    Cables.jsx          Ethernet + fibre tubes and instanced light-pulse streams
-    Laptop.jsx Router.jsx Server.jsx Environment.jsx   low-poly models
-  ui/
-    Timeline.jsx        bottom timeline
-    InfoPanel.jsx       explanation + packet-header panel
+  App.jsx          state, autoplay, keyboard shortcuts
+  stations.js      camera positions + teaching text for each station  ← edit content here
+  paths.js         cable routes shared by cables, pulses and packet
+  scene/           3D models, camera, cables, packet animation
+  ui/              timeline and info panel
 ```
 
-All models are built from Three.js primitives with `flatShading`, so there are
-no external assets to download.
+---
 
-## Ideas for student extensions
+## 2. Claymation video (Remotion)
 
-- Add a **DNS resolver** station before the router.
-- Make the request **lose a packet** and show TCP retransmission.
-- Add a slider for **distance to the server** and compute propagation delay
-  (≈ 5 µs per km in fibre).
-- Show **TLS encryption** by scrambling the packet label after the laptop.
-- Replace the single path with several routers and animate **traceroute** hops
-  with TTL counting down.
+The finished video is already in the repo root: **`claude-claymation.mp4`** (1920×1080, 12 fps, 240 frames, 20 s). You only need the steps below to preview or change it.
 
-Built with [React](https://react.dev), [Three.js](https://threejs.org),
-[React Three Fiber](https://r3f.docs.pmnd.rs), drei and
-react-three/postprocessing.
+All commands run inside the `claymation/` folder:
+
+```bash
+cd claymation
+npm install
+```
+
+### Preview in Remotion Studio
+
+```bash
+npm run studio
+```
+
+This opens Remotion Studio in your browser (usually http://localhost:3000). Choose the **ClayMath** composition, then scrub the timeline or press play. Edits to files in `claymation/src/` show up live.
+
+### Render the video
+
+```bash
+npm run render
+```
+
+This writes `claude-claymation.mp4` to the repository root, replacing the existing file. It takes a few minutes, depending on your CPU.
+
+Under the hood this runs:
+
+```bash
+npx remotion render src/index.jsx ClayMath ../claude-claymation.mp4 --gl=swangle
+```
+
+- `--gl=swangle` gives the headless browser software WebGL, which the 3D scene needs.
+- The first render downloads Remotion's headless Chrome. If your network blocks that download, point Remotion at an existing Chrome/Chromium headless shell by adding `--browser-executable=/path/to/headless-shell` to the command.
+- To check a single frame quickly, render a still instead:
+  `npx remotion still src/index.jsx ClayMath frame.png --frame=120 --gl=swangle`
+
+### Story timeline
+
+| Time | Frames | What happens |
+|------|--------|--------------|
+| 0–3 s | 0–36 | The clay starburst wakes up |
+| 3–8 s | 36–96 | It inspects messy clay numbers |
+| 8–14 s | 96–168 | The numbers organise into `3 + 4 = 7` with glowing blue blocks |
+| 14–17 s | 168–204 | It peers through a magnifying glass |
+| 17–20 s | 204–240 | Logo lockup |
+
+Beat timings live in `claymation/src/timeline.js`. See `claymation/README.md` for more on how the scene is built.
+
+> The starburst character and "Claude" lettering are hand-modelled stand-ins, not official Anthropic brand assets. Check Anthropic's brand guidelines before publishing the video.
+
+---
+
+## Troubleshooting
+
+- **Blank or black 3D canvas:** make sure hardware acceleration / WebGL is enabled in your browser.
+- **Port 5173 already in use:** Vite will pick the next free port; check the terminal output for the URL.
+- **`npm install` errors about peer dependencies:** check your Node.js version with `node -v` (18+ required).
