@@ -16,6 +16,32 @@ Everything is procedural: rays, digits and letters are rolled clay "coils"
 (tube geometry with a fingerprint bump map), and a per-frame deterministic
 jitter ("boil") gives the hand-animated stop-motion feel.
 
+## Sound
+
+The soundtrack (`src/Soundtrack.jsx`) layers these sounds with `<Audio>` from `@remotion/media`:
+
+| Sound | When |
+|-------|------|
+| Rubbery stretch + breathy yawn | frame 20, as the character wakes |
+| Playful pops (3 pitches) | each time a clay number hops into the equation |
+| Whoosh | as each glowing blue block appears |
+| Low hum | under the blue blocks (frames 128–212), swelling when 3 + 4 = 7 lands |
+| Acoustic guitar | background music, with volume keyframed to the story |
+
+Every sound is synthesized from scratch by `scripts/make_audio.py` (plucked-string
+synthesis for the guitar, filtered noise and oscillators for the effects), so
+there are no third-party samples or licences involved. The generated files are
+committed in `public/sfx/`; to tweak a sound, edit the script and run:
+
+```bash
+python3 scripts/make_audio.py   # needs numpy; rewrites public/sfx/*.wav
+```
+
+Sound timings come from the same constants as the animation (`HOP_AT`,
+`BLOCK_AT` in `src/MathBlocks.jsx`), so retiming a hop moves its pop too.
+
+## Running
+
 ```bash
 npm install
 npm run studio   # preview in Remotion Studio

@@ -6,6 +6,7 @@ import { CapsuleGeometry, ConeGeometry, CylinderGeometry, SphereGeometry, TorusG
 import { INK, clay, getWallTexture, getWoodTexture, lumpify } from './clay.js'
 import { ClayGlyph, glyphWidth } from './ClayGlyph.jsx'
 import { MathBlocks } from './MathBlocks.jsx'
+import { Soundtrack } from './Soundtrack.jsx'
 import { Starburst } from './Starburst.jsx'
 import { boil, key, pop } from './timeline.js'
 
@@ -164,6 +165,7 @@ export function ClayMath() {
   const { width, height } = useVideoConfig()
   return (
     <AbsoluteFill style={{ backgroundColor: '#c99b74' }}>
+      <Soundtrack />
       <ThreeCanvas
         width={width}
         height={height}

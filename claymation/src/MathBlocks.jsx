@@ -16,9 +16,10 @@ const TOKENS = [
   { ch: '7', color: '#e48a9e', digit: true, mess: [2.9, 0.75, 0.35, 0.2] },
 ]
 // When each token hops into the row (frames), in a playful order.
-const HOP_AT = [98, 110, 104, 116, 122]
+// Exported so the soundtrack can sync its pops and whooshes to them.
+export const HOP_AT = [98, 110, 104, 116, 122]
 const HOP_LEN = 8
-const BLOCK_AT = [130, null, 134, null, 138]
+export const BLOCK_AT = [130, null, 134, null, 138]
 const ROW_Y = 0.5
 const ROW_Z = 0.15
 
